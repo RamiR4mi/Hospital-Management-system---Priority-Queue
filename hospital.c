@@ -107,9 +107,15 @@ int isEmpty(PriorityQ* pq) {
 // Insert a new patient into the priority queue
 void newPatient(PriorityQ* pq, Patient p) {
     if (pq->size >= pq->capacity) {
-        printf("Overflow\n");
-        return;
+        pq->capacity *= 2; // Double the capacity ( because in this case, we CAN'T REFUSE more patients, It's a Hospital !!!)
+        pq->heap = (Patient*)realloc(pq->heap, (pq->capacity + 1) * sizeof(Patient));
+        
+        if (pq->heap == NULL) { // Check for allocation failure
+            printf("Memory allocation failed\n");
+            exit(1);
+        }
     }
+    
     pq->heap[++pq->size] = p;
     upHeap(pq, pq->size);
 }
